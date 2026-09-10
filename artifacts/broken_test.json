@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "capability_id": "lookup_savings_balance",
+  "name": "Lookup Savings Balance",
+  "inputs": {
+    "member_id": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "outputs": {
+    "result": {
+      "type": "string"
+    }
+  },
+  "steps": [
+    {
+      "action": "fill",
+      "target": {
+        "strategy": "label",
+        "value": "Member ID:"
+      },
+      "value": "{{member_id}}",
+      "id": "step_1"
+    },
+    {
+      "action": "click",
+      "target": {
+        "strategy": "role",
+        "role": "button",
+        "value": "Broken Search Button"
+      },
+      "id": "step_2"
+    },
+    {
+      "id": "step_3",
+      "action": "extract",
+      "target": {
+        "strategy": "css",
+        "value": "#result"
+      },
+      "output": "result"
+    }
+  ],
+  "success_condition": {
+    "type": "text_present",
+    "value": "Member Details"
+  }
+}

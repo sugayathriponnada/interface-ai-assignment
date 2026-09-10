@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Legacy Credit Union</title>
+</head>
+
+<body>
+
+    <h1>Legacy Credit Union Administration</h1>
+
+    <hr>
+
+    <h2>Member Search</h2>
+
+    <label for="memberId">Member ID:</label>
+
+    <input
+        type="text"
+        id="memberId"
+    >
+
+    <button onclick="searchMember()">
+        Search
+    </button>
+
+    <hr>
+
+    <div id="result"></div>
+
+
+    <script>
+
+        // -----------------------------------
+        // Fake member database
+        // -----------------------------------
+
+        const members = {
+
+            "12345": {
+                name: "Jane Demo",
+                savings: "$4,820.35"
+            },
+
+            "67890": {
+                name: "John Demo",
+                savings: "$7,342.18"
+            },
+
+            // This member requires a human
+            // operator to approve verification.
+            "11111": {
+                name: "Alex Demo",
+                savings: "$1,250.00",
+                requiresVerification: true
+            }
+
+        };
+
+
+        // -----------------------------------
+        // Search for member
+        // -----------------------------------
+
+        function searchMember() {
+
+            const memberId =
+                document.getElementById(
+                    "memberId"
+                ).value;
+
+            const result =
+                document.getElementById(
+                    "result"
+                );
+
+            const member =
+                members[memberId];
+
+
+            // --------------------------------
+            // MEMBER NOT FOUND
+            // --------------------------------
+
+            if (!member) {
+
+                result.innerHTML = `
+                    <h2>Member Not Found</h2>
+
+                    <p>
+                        No member exists with ID
+                        ${memberId}.
+                    </p>
+                `;
+
+                return;
+            }
+
+
+            // --------------------------------
+            // MANUAL VERIFICATION REQUIRED
+            // --------------------------------
+
+            if (member.requiresVerification) {
+
+                result.innerHTML = `
+                    <h2>
+                        Manual Verification Required
+                    </h2>
+
+                    <p>
+                        Member ID: ${memberId}
+                    </p>
+
+                    <p>
+                        This member requires operator
+                        verification before account
+                        information can be displayed.
+                    </p>
+
+                    <button
+                        onclick="approveMember('${memberId}')"
+                    >
+                        Operator Approve
+                    </button>
+                `;
+
+                return;
+            }
+
+
+            // --------------------------------
+            // NORMAL MEMBER DETAILS
+            // --------------------------------
+
+            showMemberDetails(
+                memberId
+            );
+        }
+
+
+        // -----------------------------------
+        // Human operator approval
+        // -----------------------------------
+
+        function approveMember(memberId) {
+
+            showMemberDetails(
+                memberId
+            );
+        }
+
+
+        // -----------------------------------
+        // Display member details
+        // -----------------------------------
+
+        function showMemberDetails(memberId) {
+
+            const result =
+                document.getElementById(
+                    "result"
+                );
+
+            const member =
+                members[memberId];
+
+            result.innerHTML = `
+                <h2>Member Details</h2>
+
+                <p>
+                    Member ID: ${memberId}
+                </p>
+
+                <p>
+                    Name: ${member.name}
+                </p>
+
+                <p>
+                    Savings Balance:
+                    ${member.savings}
+                </p>
+            `;
+        }
+
+    </script>
+
+</body>
+
+</html>
