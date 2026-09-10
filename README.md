@@ -235,7 +235,7 @@ interface-ai-assignment/
 |   `-- replay_log.jsonl
 |-- README.md
 `-- REPORT.md
-
+```
 ## Evidence
 
 The evidence directory contains the saved capability plus structured logs from the genuine LLM discovery run and deterministic replay. Sensitive member values are redacted from persisted logs.
