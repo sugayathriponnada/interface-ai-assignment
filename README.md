@@ -238,6 +238,15 @@ interface-ai-assignment/
 ```
 ## Evidence
 
-The evidence directory contains the saved capability plus structured logs from the genuine LLM discovery run and deterministic replay. Sensitive member values are redacted from persisted logs.
+The `evidence/` directory contains evidence from the genuine LLM discovery run and deterministic replay:
 
-For architecture decisions, tradeoffs, multi-tenant design, safety, and implementation cuts, see REPORT.md.
+- `discovered_lookup_savings_balance.json` — saved reusable capability produced by discovery.
+- `discovery_log.jsonl` — structured evidence from the LLM observe-decide-act run.
+- `replay_log.jsonl` — structured replay outcomes, including success, business outcomes, hard failures, and human handoff usage.
+- `failure_step_2_click.png` — browser state captured when the intentionally broken capability produces a `TARGET_TIMEOUT`.
+- `human_handoff_required.png` — live browser state captured when automation pauses and transfers control to a human.
+- `human_handoff_resumed.png` — the same browser session after the operator acts and returns control to automation.
+
+Sensitive member values are redacted from persisted structured logs. The screenshots use only synthetic data from the local demo application.
+
+For architecture decisions, tradeoffs, multi-tenant design, safety, and implementation cuts, see `REPORT.md`.

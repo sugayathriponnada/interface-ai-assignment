@@ -143,6 +143,8 @@ A successful output is verified against the application's resulting state. For t
 
 Structured replay evidence is appended to `evidence/replay_log.jsonl`. Persistent evidence records the final status, capability identifier, whether human handoff occurred, and structured failure information when applicable. Member data is redacted from the persisted log.
 
+For richer failure evidence, replay captures the live browser state when a target timeout occurs. The intentionally broken replay produces `evidence/failure_step_2_click.png` alongside the structured `TARGET_TIMEOUT` result. This preserves visual context for debugging while the structured log remains machine-readable. The screenshot contains only synthetic data from the local demo application.
+
 One practical observation from discovery was that visible body text alone did not expose the current value of the member ID input. The discovery loop therefore explicitly observes the input value in addition to page text. This prevents the model from repeatedly filling an input whose state changed but was not represented in the original observation.
 ## Heterogeneity & multi-tenant
 
@@ -196,6 +198,10 @@ If the human intervention does not resolve the blocking state, replay returns a 
 The handoff implementation is intentionally minimal: the terminal acts as the operator interface. In production, the same mechanism could be connected to an operator console that displays the capability, current step, blocking reason, browser session, and available intervention controls.
 
 Evidence preserves whether human intervention occurred through the `human_handoff_used` field while avoiding persistence of raw member data.
+
+Evidence preserves whether human intervention occurred through the `human_handoff_used` field while avoiding persistence of raw member data. Replay also captures `evidence/human_handoff_required.png` immediately before control is transferred to the operator and `evidence/human_handoff_resumed.png` immediately after the operator returns control. Together, these snapshots preserve the application state across the same-session handoff. The screenshots contain only synthetic data from the local demo application.
+
+The current prototype records the control-transfer boundary and the before/after browser states, but it does not instrument each individual human browser action as a structured event. A production operator console would record operator identity, manual actions, timestamps, and approval/audit metadata.
 
 ## Safety
 

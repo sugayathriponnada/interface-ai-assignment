@@ -220,6 +220,20 @@ with sync_playwright() as p:
 
             replay_failed = True
 
+            # Capture richer failure evidence for debugging.
+            failure_screenshot = (
+                f"evidence/failure_{step['id']}_{action}.png"
+            )
+
+            page.screenshot(
+                path=failure_screenshot,
+                full_page=True
+            )
+
+            print(
+                f"Failure screenshot saved: {failure_screenshot}"
+            )
+
             failure_details = {
                 "code": "TARGET_TIMEOUT",
                 "step_id": step["id"],
@@ -294,8 +308,24 @@ with sync_playwright() as p:
         # -----------------------------------
 
         elif "Manual Verification Required" in page_text:
-
+    
             status = "human_intervention_required"
+
+            # Capture the state at the moment automation
+            # transfers control to the human operator.
+            handoff_screenshot = (
+                "evidence/human_handoff_required.png"
+            )
+
+            page.screenshot(
+                path=handoff_screenshot,
+                full_page=True
+            )
+
+            print(
+                f"Handoff screenshot saved: "
+                f"{handoff_screenshot}"
+            )
 
             print(
                 "\n======================================"
@@ -354,6 +384,21 @@ with sync_playwright() as p:
                 "Checking the SAME browser session..."
             )
 
+            # Capture the state after the human
+            # returns control to automation.
+            handoff_resumed_screenshot = (
+                "evidence/human_handoff_resumed.png"
+            )
+
+            page.screenshot(
+                path=handoff_resumed_screenshot,
+                full_page=True
+            )
+
+            print(
+                f"Post-handoff screenshot saved: "
+                f"{handoff_resumed_screenshot}"
+            )
 
             page_text = page.locator(
                 "body"
