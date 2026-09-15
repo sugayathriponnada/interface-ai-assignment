@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 from datetime import datetime, timezone
 
@@ -27,13 +28,30 @@ client = genai.Client(api_key=api_key)
 # 2. Define the natural-language goal
 # ---------------------------------------
 
-goal = (
+default_goal = (
     "Look up member 12345 and return "
     "their savings balance."
 )
 
+default_target = "http://localhost:8000"
+
+goal = (
+    sys.argv[1]
+    if len(sys.argv) > 1
+    else default_goal
+)
+
+target_url = (
+    sys.argv[2]
+    if len(sys.argv) > 2
+    else default_target
+)
+
 print("\nGOAL:")
 print(goal)
+
+print("\nTARGET:")
+print(target_url)
 
 
 # ---------------------------------------
@@ -95,7 +113,7 @@ add_evidence(
             "their savings balance."
         ),
         "model": "gemini-3.6-flash",
-        "target": "http://localhost:8000"
+        "target": target_url
     }
 )
 
@@ -112,9 +130,7 @@ with sync_playwright() as p:
 
     page = browser.new_page()
 
-    page.goto(
-        "http://localhost:8000"
-    )
+    page.goto(target_url)
 
 
     # ---------------------------------------
