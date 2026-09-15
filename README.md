@@ -79,6 +79,13 @@ Then run:
 ```bash
 python discovery.py
 ```
+Discovery also accepts the natural-language goal and target URL as command-line inputs:
+
+```bash
+python discovery.py "Look up member 12345 and return their savings balance." "http://localhost:8000"
+```
+
+If no arguments are provided, the demo goal and local target are used by default.
 
 The discovery process performs a genuine LLM-driven browser run. Gemini repeatedly observes the live application, decides the next action, and Playwright executes that action.
 
