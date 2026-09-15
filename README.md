@@ -70,6 +70,28 @@ Keep that terminal running. The demo application will be available at:
 ```text
 http://localhost:8000
 ```
+## Quick Demo
+
+Start the local application:
+
+```bash
+python -m http.server 8000 --directory demo_app
+```
+
+Keep that terminal running. In a second terminal, run the LLM-driven discovery:
+
+```bash
+python discovery.py "Look up member 12345 and return their savings balance." "http://localhost:8000"
+```
+
+After discovery creates the capability artifact, replay it deterministically with a different input:
+
+```bash
+python replay.py 67890
+```
+
+The discovery step uses Gemini to observe, decide, and act against the live UI. The replay step uses the saved capability artifact and does not invoke the LLM.
+
 ## Run LLM Discovery
 
 Make sure the local demo application is running in a separate terminal.
@@ -239,7 +261,10 @@ interface-ai-assignment/
 |-- evidence/
 |   |-- discovered_lookup_savings_balance.json
 |   |-- discovery_log.jsonl
-|   `-- replay_log.jsonl
+|   |-- replay_log.jsonl
+|   |-- failure_step_2_click.png
+|   |-- human_handoff_required.png
+|   `-- human_handoff_resumed.png
 |-- README.md
 `-- REPORT.md
 ```

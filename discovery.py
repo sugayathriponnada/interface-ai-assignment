@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 from dotenv import load_dotenv
 from google import genai
 from playwright.sync_api import sync_playwright
+from safety import check_origin, check_action
 
 
 # ---------------------------------------
@@ -129,6 +130,8 @@ with sync_playwright() as p:
     )
 
     page = browser.new_page()
+
+    check_origin(target_url)
 
     page.goto(target_url)
 
@@ -289,6 +292,8 @@ Do not include explanations.
 
         action = decision["action"]
 
+        if action != "complete":
+            check_action(action)
 
         # Record that the LLM made a decision,
         # but do not persist raw values/results.
@@ -626,7 +631,21 @@ Do not include explanations.
         page.wait_for_timeout(
             500
         )
+    else:
+        add_evidence(
+            event="discovery_failed",
+            step_number=max_steps,
+            status="failure",
+            details={
+                "reason": "Maximum discovery steps exceeded",
+                "error_code": "DISCOVERY_MAX_STEPS_EXCEEDED"
+            }
+        )
 
+        print(
+            "\nDISCOVERY STOPPED: "
+            "maximum step limit reached."
+        )
 
     # ---------------------------------------
     # 7. Save discovery evidence

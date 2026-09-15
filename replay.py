@@ -369,6 +369,13 @@ with sync_playwright() as p:
                 "to give control back to automation..."
             )
 
+            append_evidence({
+                "event": "human_action_completed",
+                "capability_id": capability["capability_id"],
+                "action": "operator_approved_manual_verification",
+                "control": "returned_to_automation"
+            })
+
 
             # --------------------------------
             # CONTROL RETURNS TO AUTOMATION
